@@ -29,7 +29,7 @@ const steps = [
     description: "We ask a few quick questions and confirm the scope."
   },
   {
-    title: "Edilma schedules",
+    title: "We schedule your visit",
     description: "We set the estimate or first cleaning and keep it easy."
   }
 ];
