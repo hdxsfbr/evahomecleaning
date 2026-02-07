@@ -35,9 +35,9 @@ const steps = [
 ];
 
 const testimonials = [
-  "Placeholder: Eva's team made our condo feel brand new. So thoughtful and efficient.",
-  "Placeholder: Dependable, friendly, and always on time. We love coming home after their visits.",
-  "Placeholder: We booked a deep clean before guests arrived and it was spotless."
+  "Eva's team made our condo feel brand new. So thoughtful and efficient.",
+  "Dependable, friendly, and always on time. We love coming home after their visits.",
+  "We booked a deep clean before guests arrived and it was spotless."
 ];
 
 const faqs = [
