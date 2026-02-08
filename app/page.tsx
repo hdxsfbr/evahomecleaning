@@ -82,7 +82,13 @@ export default function Home() {
               priority
             />
           </div>
-          <nav className="hidden items-center gap-6 text-sm font-semibold text-ink-700 md:flex">
+          <div className="hidden items-center gap-6 text-sm font-semibold text-ink-700 md:flex">
+            <a
+              href="tel:+14156256490"
+              className="inline-flex items-center gap-2 rounded-full border border-cloud-200 bg-white px-4 py-2 text-sm font-semibold text-ink-700 transition hover:border-brand-200"
+            >
+              Call or text: (415) 625-6490
+            </a>
             <a className="hover:text-ink-900" href="#services">
               Services
             </a>
@@ -98,7 +104,7 @@ export default function Home() {
             >
               Get a Free Quote
             </a>
-          </nav>
+          </div>
         </div>
       </header>
 
@@ -306,6 +312,17 @@ export default function Home() {
             <p className="mt-4 text-sm text-ink-600">
               We respond quickly with a thoughtful quote. If you have specific priorities, mention them and we will tailor your visit.
             </p>
+            <div className="mt-5 flex flex-wrap items-center gap-3 text-sm font-semibold text-ink-700">
+              <span className="rounded-full border border-cloud-200 bg-white px-3 py-1">
+                Call or text:
+              </span>
+              <a
+                href="tel:+14156256490"
+                className="text-brand-700 transition hover:text-brand-600"
+              >
+                (415) 625-6490
+              </a>
+            </div>
             <div className="mt-6 rounded-2xl border border-sparkle-200 bg-sparkle-50 p-5 text-sm text-ink-600">
               <p className="font-semibold text-ink-900">Quick note</p>
               <p className="mt-2">
