@@ -1,6 +1,7 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import { Nunito, Sora } from "next/font/google";
+import Script from "next/script";
 
 const sora = Sora({
   subsets: ["latin"],
@@ -53,7 +54,19 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${sora.variable} ${nunito.variable}`}>
-      <body>{children}</body>
+      <body>
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-KEWJ0YX427"
+          strategy="afterInteractive"
+        />
+        <Script id="ga4" strategy="afterInteractive">
+          {`window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-KEWJ0YX427');`}
+        </Script>
+        {children}
+      </body>
     </html>
   );
 }
