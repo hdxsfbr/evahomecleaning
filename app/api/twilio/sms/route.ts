@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
+import { validateRequest } from "twilio";
 
 export const runtime = "nodejs";
 
@@ -27,11 +28,33 @@ export async function POST(request: Request) {
   if (!process.env.RESEND_API_KEY || !process.env.FROM_EMAIL || !process.env.LEADS_TO) {
     return new NextResponse("Email configuration missing", { status: 500 });
   }
+  if (!process.env.TWILIO_AUTH_TOKEN) {
+    return new NextResponse("Twilio configuration missing", { status: 500 });
+  }
 
-  const formData = await request.formData();
-  const from = String(formData.get("From") || "");
-  const to = String(formData.get("To") || "");
-  const body = String(formData.get("Body") || "");
+  const rawBody = await request.text();
+  const params = new URLSearchParams(rawBody);
+  const from = String(params.get("From") || "");
+  const to = String(params.get("To") || "");
+  const body = String(params.get("Body") || "");
+
+  const signature = request.headers.get("x-twilio-signature") || "";
+  const url = request.url;
+  const paramObject: Record<string, string> = {};
+  params.forEach((value, key) => {
+    paramObject[key] = value;
+  });
+
+  const isValid = validateRequest(
+    process.env.TWILIO_AUTH_TOKEN,
+    signature,
+    url,
+    paramObject
+  );
+
+  if (!isValid) {
+    return new NextResponse("Invalid signature", { status: 403 });
+  }
 
   const timestamp = new Date().toISOString();
   const extraFields = [
@@ -45,7 +68,7 @@ export async function POST(request: Request) {
     "FromCountry"
   ]
     .map((key) => {
-      const value = formData.get(key);
+      const value = params.get(key);
       return value ? `${key}: ${value}` : null;
     })
     .filter(Boolean)
