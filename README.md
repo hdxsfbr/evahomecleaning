@@ -33,3 +33,14 @@ Set the following DNS records:
 
 - Apex A record: `76.76.21.21`
 - `www` CNAME: `cname.vercel-dns.com`
+
+## Twilio inbound SMS
+
+Set the Messaging webhook in Twilio to:
+
+`https://evahomecleaning.com/api/twilio/sms`
+
+Environment variables required (already in `.env.example`):
+- `RESEND_API_KEY`
+- `FROM_EMAIL`
+- `LEADS_TO`
