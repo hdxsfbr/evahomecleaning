@@ -79,17 +79,5 @@ export async function POST(request: Request) {
     return new NextResponse("Email send failed", { status: 500 });
   }
 
-  const twiml = `<?xml version="1.0" encoding="UTF-8"?>
-<Response>
-  <Message>${escapeXml(
-    "Thanks for texting Eva Home Cleaning! We received your message and will reply shortly."
-  )}</Message>
-</Response>`;
-
-  return new NextResponse(twiml, {
-    status: 200,
-    headers: {
-      "Content-Type": "text/xml"
-    }
-  });
+  return new NextResponse(null, { status: 204 });
 }
