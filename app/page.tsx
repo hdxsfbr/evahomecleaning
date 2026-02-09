@@ -89,7 +89,7 @@ export default function Home() {
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
           <div className="flex items-center gap-3">
             <Image
-              src="/brand/mascot-name-horizontal.png"
+              src="/brand/mascot-name-horizontal-no-background.png"
               alt="Eva Home Cleaning"
               width={220}
               height={64}
