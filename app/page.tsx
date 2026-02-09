@@ -16,6 +16,21 @@ const services = [
     title: "Move-in / Move-out",
     description:
       "A thorough clean for empty homes, rentals, and transitions so everything feels ready."
+  },
+  {
+    title: "Office cleaning",
+    description:
+      "Reliable service for small offices and studios that need a tidy, professional feel."
+  },
+  {
+    title: "Airbnb turnovers",
+    description:
+      "Fast, detail-focused resets for guest-ready spaces and short-term rentals."
+  },
+  {
+    title: "Post-construction",
+    description:
+      "Dust removal and detailed cleanup after renovations or light construction."
   }
 ];
 
@@ -119,7 +134,7 @@ export default function Home() {
               A clean home, cared for by people you trust.
             </h1>
             <p className="mt-4 max-w-xl text-lg text-ink-600">
-              Eva Home Cleaning offers friendly, professional residential cleaning for busy households. Book regular care, a deep clean, or move support tailored to your space.
+              Eva Home Cleaning offers friendly, professional cleaning for busy households and small offices. Book regular care, a deep clean, move support, Airbnb turnovers, or post-construction cleanup tailored to your space.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <a
