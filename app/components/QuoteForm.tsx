@@ -5,6 +5,7 @@ import { useMemo, useState } from "react";
 type FormState = {
   name: string;
   phone: string;
+  email: string;
   city_or_zip: string;
   message: string;
   company: string;
@@ -13,6 +14,7 @@ type FormState = {
 const initialState: FormState = {
   name: "",
   phone: "",
+  email: "",
   city_or_zip: "",
   message: "",
   company: ""
@@ -53,12 +55,17 @@ export default function QuoteForm() {
     setStatus("submitting");
 
     try {
+      const payload = {
+        ...form,
+        email: form.email.trim() || undefined
+      };
+
       const response = await fetch("/api/lead", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify(form)
+        body: JSON.stringify(payload)
       });
 
       if (!response.ok) {
@@ -109,6 +116,16 @@ export default function QuoteForm() {
             />
           </label>
         </div>
+
+        <label className="flex flex-col gap-2 text-sm font-medium text-ink-700">
+          Email (optional)
+          <input
+            type="email"
+            className="rounded-xl border border-cloud-200 bg-white px-4 py-3 text-sm shadow-sm focus:border-brand-400 focus:outline-none"
+            value={form.email}
+            onChange={(event) => update("email", event.target.value)}
+          />
+        </label>
 
         <label className="flex flex-col gap-2 text-sm font-medium text-ink-700">
           City or ZIP *

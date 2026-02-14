@@ -7,6 +7,10 @@ export const runtime = "nodejs";
 const leadSchema = z.object({
   name: z.string().min(2),
   phone: z.string().min(7),
+  email: z.preprocess(
+    (value) => (typeof value === "string" && value.trim() === "" ? undefined : value),
+    z.string().email().optional()
+  ),
   city_or_zip: z.string().min(2),
   message: z.string().optional(),
   company: z.string().optional()
@@ -63,6 +67,7 @@ function leadSummary(payload: z.infer<typeof leadSchema>) {
   return [
     `Name: ${payload.name}`,
     `Phone: ${payload.phone}`,
+    `Email: ${payload.email?.trim() || "-"}`,
     `City/ZIP: ${payload.city_or_zip}`,
     `Message: ${payload.message?.trim() || "-"}`,
     "Note: Future: forward to Clawdbot / CRM"
