@@ -6,16 +6,9 @@ export const runtime = "nodejs";
 
 const leadSchema = z.object({
   name: z.string().min(2),
-  email: z.string().email(),
   phone: z.string().min(7),
   city_or_zip: z.string().min(2),
-  home_type: z.enum(["house", "condo", "apartment"]),
-  beds: z.number().optional(),
-  baths: z.number().optional(),
-  frequency: z.enum(["one-time", "weekly", "bi-weekly", "monthly"]),
-  condition: z.enum(["light", "normal", "heavy"]),
   message: z.string().optional(),
-  consent: z.boolean(),
   company: z.string().optional()
 });
 
@@ -69,15 +62,8 @@ function isLikelyBot(payload: z.infer<typeof leadSchema>) {
 function leadSummary(payload: z.infer<typeof leadSchema>) {
   return [
     `Name: ${payload.name}`,
-    `Email: ${payload.email}`,
     `Phone: ${payload.phone}`,
     `City/ZIP: ${payload.city_or_zip}`,
-    `Home type: ${payload.home_type}`,
-    `Beds: ${payload.beds ?? "-"}`,
-    `Baths: ${payload.baths ?? "-"}`,
-    `Frequency: ${payload.frequency}`,
-    `Condition: ${payload.condition}`,
-    `Consent to text: ${payload.consent ? "Yes" : "No"}`,
     `Message: ${payload.message?.trim() || "-"}`,
     "Note: Future: forward to Clawdbot / CRM"
   ].join("\n");
@@ -109,13 +95,6 @@ export async function POST(request: Request) {
     );
   }
 
-  if (!payload.consent) {
-    return NextResponse.json(
-      { error: "Consent is required." },
-      { status: 400 }
-    );
-  }
-
   if (isLikelyBot(payload)) {
     return NextResponse.json(
       { error: "Submission rejected." },
@@ -129,42 +108,17 @@ export async function POST(request: Request) {
     .map((line) => `<p style=\"margin:0 0 8px\">${line}</p>`)
     .join("");
 
-  const confirmationHtml = `
-    <div style="font-family:Arial,sans-serif;line-height:1.5;color:#0c1c1a;">
-      <p>Hi ${payload.name},</p>
-      <p>We got your request for a quote. Eva will ask a few quick questions and get back to you shortly.</p>
-      <p>If you have any updates, just reply to this email.</p>
-      <p>Thank you,<br/>Eva Home Cleaning</p>
-    </div>
-  `;
-
   try {
     const internalResult = await resend.emails.send({
       from: fromEmail,
       to: leadsTo,
       subject: `New cleaning lead: ${payload.name}`,
       html: internalHtml,
-      reply_to: payload.email
+      reply_to: fromEmail
     });
 
     if (internalResult.error) {
       console.error("Resend internal email error:", internalResult.error);
-      return NextResponse.json(
-        { error: "Unable to send email right now." },
-        { status: 500 }
-      );
-    }
-
-    const confirmationResult = await resend.emails.send({
-      from: fromEmail,
-      to: payload.email,
-      subject: "We got your quote request",
-      html: confirmationHtml,
-      reply_to: fromEmail
-    });
-
-    if (confirmationResult.error) {
-      console.error("Resend confirmation email error:", confirmationResult.error);
       return NextResponse.json(
         { error: "Unable to send email right now." },
         { status: 500 }
