@@ -22,6 +22,14 @@ const initialState: FormState = {
 
 export default function QuoteForm() {
   const [form, setForm] = useState<FormState>(initialState);
+
+  const trackEvent = (eventName: string, params?: Record<string, string | number>) => {
+    if (typeof window === "undefined") return;
+    const gtag = (window as unknown as { gtag?: (...args: unknown[]) => void }).gtag;
+    if (typeof gtag === "function") {
+      gtag("event", eventName, params || {});
+    }
+  };
   const [status, setStatus] = useState<
     "idle" | "submitting" | "success" | "error"
   >("idle");
@@ -49,6 +57,10 @@ export default function QuoteForm() {
     if (!isValid) {
       setStatus("error");
       setError("Please complete the required fields.");
+      trackEvent("form_error", {
+        form_name: "quote_form",
+        error_type: "validation"
+      });
       return;
     }
 
@@ -75,6 +87,11 @@ export default function QuoteForm() {
 
       setStatus("success");
       setForm(initialState);
+      trackEvent("generate_lead", {
+        form_name: "quote_form",
+        lead_type: "cleaning_quote",
+        source: "website"
+      });
     } catch (err) {
       setStatus("error");
       setError(
@@ -82,6 +99,10 @@ export default function QuoteForm() {
           ? err.message
           : "Something went wrong."
       );
+      trackEvent("form_error", {
+        form_name: "quote_form",
+        error_type: "submit"
+      });
     }
   };
 
